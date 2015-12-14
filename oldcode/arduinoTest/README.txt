@@ -1,0 +1,1 @@
+This folder includes arduino files to test specific components of the full controller without commenting out gobs of code.

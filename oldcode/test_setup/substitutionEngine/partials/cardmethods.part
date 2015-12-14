@@ -1,0 +1,56 @@
+///////////////////////////////BEGIN CARD SPECIFIC METHODS//////////////////////////////////
+//                                                                                        //
+//                                                                                        //
+
+void exp_instr_router(byte block[16]){
+  byte base_instruction = block[0]; //First byte is the exp instruction code
+
+  switch(base_instruction){
+    case 0x00:
+      read_analog(block);
+      break;
+    default:
+      Serial.println();
+      break;
+  }
+}
+
+
+void read_analog(byte block[16]){
+  unsigned int analog_pin = bytes_to_int(block, 7);
+  unsigned int local_pin;
+  switch(analog_pin){
+    case 0:
+      local_pin = A0;
+      break;
+    case 1:
+      local_pin = A1;
+      break;
+    case 2:
+      local_pin = A2;
+      break;
+    case 3:
+      local_pin = A3;
+      break; 
+    default:
+       return;
+      break;
+  }
+  int voltage = analogRead(local_pin);
+  uint8_t data[] = {0,0,0,0,0,0,0,0};
+  data[0] = block[0]; //record which instruction this data came from
+  place_int(data, (int)((micros()-exp_start_time)/1000L), 1); //(int)((micros()-exp_start_time)/1000)
+  place_int(data, voltage, 3);
+  if(exp_data_pointer<max_data){
+    for(int h = 0;h<8;h++){
+      exp_data[exp_data_pointer][h] = data[h];
+    }
+    print_bytes(data, 8);
+    exp_data_pointer++;
+  }else{
+    Serial.println(F("Data array full!"));
+  }
+}
+//                                                                                        //
+//                                                                                        //
+/////////////////////////////////////END CARD SPECIFIC METHODS//////////////////////////////

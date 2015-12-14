@@ -1,0 +1,1 @@
+This folder contains unit tests for individual arduino functions. This is to better understand how the libraries works before integrating with the larger system.

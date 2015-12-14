@@ -1,0 +1,1 @@
+This folder contains python code for the Raspberry Pi Model 2b.

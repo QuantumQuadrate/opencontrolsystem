@@ -1,0 +1,1 @@
+This folder contains code for the Arduino Microcontroller using the libraries and functions of the Arduino IDE

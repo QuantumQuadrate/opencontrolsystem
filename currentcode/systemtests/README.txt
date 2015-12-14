@@ -1,0 +1,1 @@
+This folder contains test code for the entire system. This is mainly for testing the I2C communication system and benchmarking.

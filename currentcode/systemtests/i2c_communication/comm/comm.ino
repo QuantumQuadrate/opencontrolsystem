@@ -1,7 +1,7 @@
 #include <Wire.h>
 
 char message_array[128];
-int  message_location = 0;
+int  message_location = -1;
 char w = 'a';
 
 volatile boolean finished = false;
@@ -27,18 +27,28 @@ void request_handle(){
   while(Wire.available()>0){
     Wire.read();
   }
-  Wire.write("Hello world\n");
+  Wire.write("Hello raspberry pi!\n");
+  while(Wire.available()>0){
+    Wire.read();
+  }
 }
 
 
 //i2c interupt receive handling function during setup procedure
-void receive_handle(int howMany){
-  //delay(1000);
+void receive_handle(int howMany){\
+  //cut off first byte, it's the command byte
+  if(Wire.available() && message_location==-1){
+    Wire.read();
+    message_location = 0;
+  }
   while(Wire.available()>0){
     w = Wire.read();
     if(w == '\n'){
       Serial.println(message_array);
-      message_location = 0;
+      message_location = -1;
+      for(int i = 0;i<128;i++){
+          message_array[i] = 0;
+      }
     }else{
       message_array[message_location] = w;
       if(message_location<128){
@@ -48,7 +58,6 @@ void receive_handle(int howMany){
       }
     }
   }
-  //delay(1000);
 }
 
 //Handle errors

@@ -112,7 +112,7 @@ def test_read():
 
 #read string from card
 #Use default command of 0x55 for alternating bit pattern
-def read_string(addr, cmd = 0x55):
+def read_string(addr, cmd = 0x07):
 	read_finished = False
 	return_string = ""
 	while not read_finished:
@@ -130,6 +130,7 @@ def write_string(addr, write_string):
 	write_finished = False
 	for character in write_chars:
 		write_block(addr,[character])
-	
-write_string(5,"Hello world!\n")	
-#print(read_string(5))
+
+print(read_string(5))	
+write_string(5,"Hello arduino!\n")
+

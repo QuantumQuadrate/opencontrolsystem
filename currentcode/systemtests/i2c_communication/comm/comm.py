@@ -110,14 +110,26 @@ def test_read():
 #test_read()
 
 
+#read string from card
+#Use default command of 0x55 for alternating bit pattern
 def read_string(addr, cmd = 0x55):
 	read_finished = False
 	return_string = ""
 	while not read_finished:
 		chunk = read_block(addr,cmd)
+		#remove the 255 default characters in the rest of the buffer
 		chopped_chunk = chop_padding(chunk)
 		return_string = return_string + int_to_str(chopped_chunk)
+		#check for newline character
 		if(10 in chopped_chunk):
 			return return_string
 
-print(read_string(5))
+def write_string(addr, write_string):
+	#convert string to int list and append newline character
+	write_chars = str_to_int(write_string)
+	write_finished = False
+	for character in write_chars:
+		write_block(addr,[character])
+	
+write_string(5,"Hello world!\n")	
+#print(read_string(5))

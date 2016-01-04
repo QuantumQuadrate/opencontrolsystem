@@ -1,7 +1,7 @@
 #include <Wire.h>
 
-byte new_array[10];
-
+char message_array[128];
+int  message_location = 0;
 char w = 'a';
 
 volatile boolean finished = false;
@@ -36,10 +36,25 @@ void receive_handle(int howMany){
   //delay(1000);
   while(Wire.available()>0){
     w = Wire.read();
+    if(w == '\n'){
+      Serial.println(message_array);
+      message_location = 0;
+    }else{
+      message_array[message_location] = w;
+      if(message_location<128){
+        message_location++;
+      }else{
+        flag_error("buffer overflow");
+      }
+    }
   }
   //delay(1000);
 }
 
+//Handle errors
+void flag_error(String str){
+  Serial.println("{error_flag: " + str + "}");
+}
 
 void i2c_send_block(String str, int start, int last){
   size_t leng = last-start;

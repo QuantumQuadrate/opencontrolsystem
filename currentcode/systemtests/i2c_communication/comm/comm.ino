@@ -1,37 +1,19 @@
 #include <Wire.h>
-String s = "";
-String ws = "";
-String out = "";
-int chunk_size = 16;
-volatile boolean write_finished   = true;
-char charBuffer[16];
+
+byte new_array[10];
+
+char w = 'a';
+
 volatile boolean finished = false;
+
 void setup(){
   Serial.begin(115200);
   init_setup_i2c(5);
 }
 
 void loop(){
-  if(finished){
-    write_stream(s);
-    s = "";
-    //Serial.println(s);
-    //s = "";
-    finished = false;
-  }
-  if(Serial.available()){
-    Serial.read();
-    //String rs = "hello my name is josh 12345678";
-    write_stream(s);
-    //s = "";
-  }
+  
 }
-
-void write_stream(String str){
-  ws = str + '\n';
-  write_finished = false;
-}
-
 //setup I2C communication with specific address
 void init_setup_i2c(int addr){
   //pln("Setting up IACK with address " + String(addr))
@@ -42,34 +24,20 @@ void init_setup_i2c(int addr){
 
 //i2c interupt request handling function during setup procedure
 void request_handle(){
-  if(!write_finished){
-    if(ws.length()>chunk_size){
-      i2c_send_block(ws.substring(0, chunk_size), 0, chunk_size);
-      ws = ws.substring(chunk_size);
-    }else{
-      i2c_send_block(ws, 0, ws.length());
-      ws = "";
-      write_finished = true;
-    }
-  }else{
-    Wire.write('\n');
+  while(Wire.available()>0){
+    Wire.read();
   }
-  Serial.println("served request");
+  Wire.write("Hello world\n");
 }
 
 
 //i2c interupt receive handling function during setup procedure
 void receive_handle(int howMany){
-  char c = '_';
-  //s = "";
-  while(Wire.available()>0 && c != '\n'){
-    c = Wire.read();
-    if(c!='\n'){
-      s += c;
-    }else{
-      finished = true;
-    }
+  //delay(1000);
+  while(Wire.available()>0){
+    w = Wire.read();
   }
+  //delay(1000);
 }
 
 

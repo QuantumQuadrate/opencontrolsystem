@@ -44,7 +44,7 @@ void receive_handle(int howMany){\
   while(Wire.available()>0){
     w = Wire.read();
     if(w == '\n'){
-      Serial.println(message_array);
+      //Serial.println(message_array);
       message_location = -1;
       for(int i = 0;i<128;i++){
           message_array[i] = 0;

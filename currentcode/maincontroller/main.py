@@ -1,9 +1,12 @@
 #import ethernet/sockets communication libraries etc...
 #import card class
+import comm as comm
+main_comm = comm.comm()
 
 class main():
 	def __init__(self):
 		#setup communication with racks
+		self._comm = comm.comm()
 		#create a list of card objects that contain an address data (IP(Static IP!), card number)
 		self._cards = []
 		#Iterate through IP's or get list directly from DHCP server....

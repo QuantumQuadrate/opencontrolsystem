@@ -40,12 +40,12 @@ class net(object):
 		print('connected to host ' + str(host))
 		print('Sending data ' + data)
 		s.sendall(data)
-		data = s.recv(1024)
+		data = s.recv(2048)
 		print 'Received ', repr(data)
 		print('closing connection')
 		s.close()
 
 n = net()
 
-#n.send('10.128.226.224', "Hello world")
-n.serve()
+n.send('10.128.226.224', "Hello world")
+#n.serve()

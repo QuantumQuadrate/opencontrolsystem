@@ -10,7 +10,7 @@ class net(object):
 	def default_handle(self, data):
 		print("Handled message " + str(data))
 		#default to echo server
-		return(data)
+		return("This a default response from the server!")
 
 	#setup socket as server
 	#Pass function to handle the connection when it arrives
@@ -20,21 +20,18 @@ class net(object):
 		while 1:
 			#Wait to accept connections
 			conn, addr = self.sock.accept()
-			print 'received connection from ', addr
-			data = ''
-			#get chunks from buffer until empty
-			while 1:
-				#Append chunk
-				data += conn.recv(2048)
-				if not data:
-					print("end of transmission")
-					break
-				else:
-					print("    received data chunk:" + str(data))
-			#handle the data and send appropriate response
-			conn.sendall(handle(data))
-			#close the connection
-			conn.close()
+			try:
+				print 'received connection from ', addr
+				data = ''
+				#get chunk from buffer
+				data = conn.recv(8192)
+				print("received data chunk:" + str(data))
+				#handle the data and send appropriate response
+				conn.sendall(handle(self, data))
+				#close the connection
+				conn.close()
+			except:
+				conn.close()
 
 
 	def send(self, host='127.0.0.1', data = 'This is a message from a client'):

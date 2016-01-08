@@ -16,13 +16,13 @@ class MySocket(object):
 	
 	def serve(self):
 		self.sock.bind(('', 80))
-		self.sock.listen(5)
-		print("serving from " + my_ip)
+		self.sock.listen(1)
 		while 1:
 			client, address = self.sock.accept()
-			print("Got a connection from " + address)
+			print("Got a connection from " + str(address))
 			while 1:
 				data = self.sock.recv(1024)
+				print(data)
 				if not data:
 					break
 				client.sendall(data)

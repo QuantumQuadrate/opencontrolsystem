@@ -11,10 +11,13 @@ def request(text):
 
 def get(payload):
 	r = requests.get(url, params=payload)
-	
+	#print(r.url)
+	return r.text
 
 
 
-payload = {'request': 'cards'}
+payload = {'request': 'list cards'}
 
+p = json.dumps(payload)
+print(p)
 print(get(payload))

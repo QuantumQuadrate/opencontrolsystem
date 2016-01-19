@@ -4,12 +4,14 @@ import json
 import sys, traceback
 app = Flask(__name__, template_folder='./templates')
 
+from api import serve_api
 
 test_response = {'card1':[]}
 
 
 global_return = ""
 
+#default route that displays status
 @app.route("/")
 def main_serve():
 	now  = datetime.datetime.now()
@@ -21,7 +23,8 @@ def main_serve():
 
 	return render_template('main.html', **template_data)
 
-@app.route('/api', methods = ['POST', 'GET'])
+#Route to directly execute python
+@app.route('/direct', methods = ['POST', 'GET'])
 def hello3():
 	if(request.method == 'POST'):
 		data = request.form["data"]
@@ -29,9 +32,23 @@ def hello3():
 		return "Got request!"
 	else:
 		data = request.args.get('request', '')
-		return serve_api(request)
+		return direct_exec(request)
 
-def serve_api(params):
+#Route for api
+@app.route('/api', methods = ['GET', 'POST'])
+def api():
+	if(request.method == 'POST'):
+		return "Expected GET parameters but got POST instead"
+	elif(request.method == 'GET'):
+		data = request.args
+		return serve_api(data)
+	else:
+		return "No arguments provided"
+
+
+
+
+def direct_exec(params):
 	args = params.args
 	request = args.get('request')
 	print(request)
@@ -47,6 +64,7 @@ def serve_api(params):
 def get_remote_code():
 	f = open('server.py', 'r')
 	return f.read()
+
 def list_cards():
 	cards = []
 	for i in range(8, 10):
